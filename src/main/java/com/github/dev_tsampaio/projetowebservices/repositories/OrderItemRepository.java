@@ -1,0 +1,8 @@
+package com.github.dev_tsampaio.projetowebservices.repositories;
+
+import com.github.dev_tsampaio.projetowebservices.entities.OrderItem;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+// @Repository // Não é necessario chamar essa notação, pq ela ja esta herdando da JPARepository
+public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
+}

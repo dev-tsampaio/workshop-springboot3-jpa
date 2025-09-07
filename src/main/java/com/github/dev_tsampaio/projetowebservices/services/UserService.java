@@ -3,6 +3,7 @@ package com.github.dev_tsampaio.projetowebservices.services;
 
 import com.github.dev_tsampaio.projetowebservices.entities.User;
 import com.github.dev_tsampaio.projetowebservices.repositories.UserRepository;
+import com.github.dev_tsampaio.projetowebservices.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
@@ -23,7 +24,7 @@ public class UserService {
 
     public User findById(Long id) {
         Optional<User> obj = repository.findById(id);
-        return obj.get();
+        return obj.orElseThrow(() -> new ResourceNotFoundException(id));  // Expressão lambda
     }
 
     public User insert(User obj) {

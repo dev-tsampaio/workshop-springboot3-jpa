@@ -3,8 +3,11 @@ package com.github.dev_tsampaio.projetowebservices.services;
 
 import com.github.dev_tsampaio.projetowebservices.entities.User;
 import com.github.dev_tsampaio.projetowebservices.repositories.UserRepository;
+import com.github.dev_tsampaio.projetowebservices.services.exceptions.DataBaseException;
 import com.github.dev_tsampaio.projetowebservices.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
@@ -32,7 +35,14 @@ public class UserService {
     }
 
     public void delete(Long id){
-        repository.deleteById(id);
+        try {
+            if(!repository.existsById(id)) throw new ResourceNotFoundException(id);
+            repository.deleteById(id);
+        } catch (ResourceNotFoundException e){
+            throw new ResourceNotFoundException(id);
+        } catch (DataIntegrityViolationException e){
+            throw new DataBaseException(e.getMessage());
+        }
     }
 
     public User update(Long id, User obj) {
